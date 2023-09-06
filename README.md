@@ -16,6 +16,26 @@ table td tags should have solely numeric values so that we don't get tables
 that are only labeled tables for style purposes. The data writes to a text file
 as it is crawling
 
+# Installation
+
+Probably want to make a virtualenv first, then
+
+```
+$ pip install -r requirements.txt
+```
+
+# Run
+
+```
+$ scrapy runspider spider.py
+```
+
+or
+
+```
+$ scrapy runspider --nolog spider.py
+```
+
 ## TXT File Format
 The output text file will have each html table tag entry separated by a single
 new line char.
