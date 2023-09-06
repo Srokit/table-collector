@@ -7,6 +7,7 @@ import scrapy
 from txt import write_to_text_file
 from log import log_table
 from cleandata import clean_table
+from validator import table_is_valid
 
 TXT_FILENAME = 'dataset.txt'
 
@@ -27,6 +28,8 @@ class TableCollectSpider(scrapy.Spider):
         for table in response.css('table'):
             table_text = table.extract()
             table_text = clean_table(table_text)
+            if not table_is_valid(table_text):
+                continue
             write_to_text_file(TXT_FILENAME, table_text)
             log_table(table_text)
         for a in response.css('a'):
