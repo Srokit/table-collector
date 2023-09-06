@@ -1,6 +1,14 @@
 "The spider which will crawl the web and collect table tags."
 
+import os
+
 import scrapy
+
+from txt import write_to_text_file
+from log import log_table
+from cleandata import clean_table
+
+TXT_FILENAME = 'dataset.txt'
 
 class TableCollectSpider(scrapy.Spider):
     name = "table_collect"
@@ -9,10 +17,18 @@ class TableCollectSpider(scrapy.Spider):
             'http://www.reddit.com/',
     ]
 
+    def __init__(self, *args, **kwargs):
+        "Delete dataset file so that it is fresh"
+        super(TableCollectSpider, self).__init__(*args, **kwargs)
+        if os.path.exists(TXT_FILENAME):
+            os.remove(TXT_FILENAME)
+
     def parse(self, response):
         for table in response.css('table'):
             table_text = table.extract()
-            print(table_text)
+            table_text = clean_table(table_text)
+            write_to_text_file(TXT_FILENAME, table_text)
+            log_table(table_text)
         for a in response.css('a'):
             yield response.follow(a, callback=self.parse)
 
