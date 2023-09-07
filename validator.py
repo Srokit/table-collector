@@ -26,5 +26,8 @@ def table_is_valid(table_html: str) -> bool:
         if re.fullmatch(numeric_pattern, td_tag.text.strip()) is not None:
             num_numeric += 1
     has_min_tds = len(td_tags) >= MIN_TDS
+    # So that below line does not trigger a divide by zero error.
+    if len(td_tags) == 0:
+        return False
     has_numeric_percentage = num_numeric / len(td_tags) >= NUMERIC_PERCENTAGE
     return has_min_tds and has_numeric_percentage
