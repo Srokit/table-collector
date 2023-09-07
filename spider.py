@@ -1,6 +1,7 @@
 "The spider which will crawl the web and collect table tags."
 
 import os
+import uuid
 
 import scrapy
 
@@ -8,6 +9,7 @@ from txt import write_to_text_file
 from log import log_table
 from cleandata import clean_table
 from validator import table_is_valid
+from save_html import save_html
 
 TXT_FILENAME = 'dataset.txt'
 
@@ -32,6 +34,8 @@ class TableCollectSpider(scrapy.Spider):
                 continue
             write_to_text_file(TXT_FILENAME, table_text)
             log_table(table_text)
+            save_html_filename = uuid.uuid4().hex + '.html'
+            save_html(table_text, save_html_filename)
         for a in response.css('a'):
             yield response.follow(a, callback=self.parse)
 
