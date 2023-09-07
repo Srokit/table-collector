@@ -3,6 +3,8 @@
 NUMERIC_PERCENTAGE = 0.25
 MIN_TDS = 6
 
+import re
+
 import bs4
 
 def table_is_valid(table_html: str) -> bool:
@@ -19,6 +21,8 @@ def table_is_valid(table_html: str) -> bool:
     td_tags = soup.find_all("td")
     num_numeric = 0
     for td_tag in td_tags:
+        td_tag_text = td_tag.text.strip().replace(",", "")
+        td_tag_text = re.sub(r"\s+", "", td_tag_text)
         if re.fullmatch(numeric_pattern, td_tag.text.strip()) is not None:
             num_numeric += 1
     has_min_tds = len(td_tags) >= MIN_TDS
