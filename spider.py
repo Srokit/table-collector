@@ -34,7 +34,7 @@ class TableCollectSpider(scrapy.Spider):
                 continue
             write_to_text_file(TXT_FILENAME, table_text)
             log_table(table_text)
-            save_html_filename = uuid.uuid4().hex + '.html'
+            save_html_filename = str(uid.uuid4()) + '.html'
             save_html(table_text, save_html_filename)
         for a in response.css('a'):
             yield response.follow(a, callback=self.parse)
